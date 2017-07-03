@@ -1,0 +1,951 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">  
+    
+    <title>Emulador</title>
+    
+    <style>
+          
+            /* configurar margin a 0 y overflow a hidden, para ocupar pantalla completa */
+            body{
+                margin: 0;
+                /*overflow: hidden;*/
+                padding: 10px;
+            }
+
+    </style>
+        
+    <script type="text/javascript" src="three.js"></script>
+    <script type="text/javascript" src="jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+        
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+        
+</head>
+
+<body data-spy="scroll" data-offset="0" data-target="#theMenu">
+
+<div style="overflow: hidden; height: 620px; width: 100%; min-width: 1036px;">
+
+    <!--Dispositivos-->
+    <div style="float: left; width: 300px; margin-right: 10px;">
+        <h4>Dispositivos</h4>
+        <hr/>
+
+        <div style="overflow: hidden;">
+
+            <h5>ACELERÓMETRO</h5>
+
+            <div style="float: left; width: 100px">
+                <input id="btnConectar" type="button" value="Conectar" onclick=" Conectar() " style="width: 95px"/>
+                <br/>
+                <br/>
+                <input id="btnDesconectar" type="button" value="Desconectar" onclick=" onClose() " style="width: 95px"/>
+            </div>
+            <div style="float: right; width: 190px;">
+                <div id="mensajes" style="border: 1px solid #ccc; height: 200px; overflow: scroll; font-size: 10px;">
+                </div>
+            </div>
+        </div>
+
+        <div style="overflow: hidden;">
+
+            <h5>GPIO</h5>
+
+            <div style="float: left; width: 100px">
+                <input id="btnConectarGPIO" type="button" value="Conectar" onclick=" Conectar() " style="width: 95px"/>
+                <br/>
+                <br/>
+                <input id="btnDesconectarGPIO" type="button" value="Desconectar" onclick=" onClose() " style="width: 95px"/>
+            </div>
+            <div style="float: right; width: 190px;">
+                <div id="mensajesGPIO" style="border: 1px solid #ccc; height: 200px; overflow: scroll; font-size: 10px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Panel Acelerometro-->
+    <div style="float: left; width: 40%; margin-right: 10px;">
+        <h4>Panel Acelerómetro</h4>
+        <hr/>
+
+        <div style="overflow: hidden; margin-bottom: 5px;">
+
+            <!--Rotacion-->
+            <div style="float: left; width: 150px;">
+                <h5>Rotación</h5>
+
+                <table>
+                    <tr>
+                        <td>X</td>
+                        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqx'); "/></td>
+                        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('derx'); "/></td>
+                        <td><input id="InputX" type="text" disabled="disabled" style="width: 50px;"/></td>
+                    </tr>
+                    <tr>
+                        <td>Y</td>
+                        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqy'); "/></td>
+                        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('dery'); "/></td>
+                        <td><input id="InputY" type="text" disabled="disabled" style="width: 50px;"/></td>
+                    </tr>
+                    <tr>
+                        <td>Z</td>
+                        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqz'); "/></td>
+                        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('derz'); "/></td>
+                        <td><input id="InputZ" type="text" disabled="disabled" style="width: 50px;"/></td>
+                    </tr>
+               
+
+                </table>
+            </div>
+
+            <!--Traslacion-->
+            <div style="float: left; width: 150px;">
+                <h5>Traslación</h5>
+
+                <table>
+                    <tr>
+                        <td>X</td>
+                        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve1('izqx'); "/></td>
+                        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve1('derx'); "/></td>
+                        <td><input id="InputX_t" type="text" disabled="disabled" style="width: 50px;"/></td>
+                    </tr>
+                    <tr>
+                        <td>Y</td>
+                        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve1('izqy'); "/></td>
+                        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve1('dery'); "/></td>
+                        <td><input id="InputY_t" type="text" disabled="disabled" style="width: 50px;"/></td>
+                    </tr>
+                    <tr>
+                        <td>Z</td>
+                        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve1('izqz'); "/></td>
+                        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve1('derz'); "/></td>
+                        <td><input id="InputZ_t" type="text" disabled="disabled" style="width: 50px;"/></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!--Giro-->
+            <div style="float: left; width: 70px;">
+                <h5>Giro</h5>
+
+                <table>
+                    <tr>
+                        <td>X</td>
+                        <td><input type="checkbox" id="check" name="check" title="360 X" onclick=" verificar_check();"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Y</td>
+                        <td><input id="chkGiroEnY" type="checkbox"/></td>
+                    </tr>
+                    <tr>
+                        <td>Z</td>
+                        <td><input id="chkGiroEnZ" type="checkbox"/></td>
+                    </tr>
+
+                </table>
+
+                 <td><input type="button" name="reset" id="res" value=" Reset " onclick=" reset(); " /></td>
+                    
+            </div>
+
+            <!--Efecto-->
+            <div style="float: left; width: 70px;">
+                <h5>Efecto</h5>
+
+                <table>
+                    <tr>
+                        <td>X</td>
+                        <td><input id="chkEfectoEnX" type="checkbox"/></td>
+                    </tr>
+                    <tr>
+                        <td>Y</td>
+                        <td><input id="chkEfectoEnY" type="checkbox"/></td>
+                    </tr>
+                    <tr>
+                        <td>Z</td>
+                        <td><input id="chkEfectoEnZ" type="checkbox"/></td>
+                    </tr>
+                </table>
+            </div>
+
+           <!---->
+            <div style="float: left; width: 70px;">
+                <h5>F. Especiales</h5>
+
+                <table>
+                    <h5>Fuerza</h5>
+                    <tr>
+                  <!-- Funciones complejas-->
+                  <!--td><input type="checkbox" id="check" name="check" title="360 X" onclick=" verificar_check();"></td-->
+                        <td></td>
+                        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve3('g-'); " /></td>
+                        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve3('g+'); " /></td>
+                        <td><input id="InputG" type="text" disabled="disabled" style="width: 50px;" /></td>
+                    </tr>   
+                    <tr>
+                        <td></td>
+                        <td><p id="demo" onmousedown="mouseDown()" onmouseup="mouseUp()">TAP</p> </td>
+                        <td></td>
+                        <td><input id="InputTap" type="text" disabled="disabled" style="width: 50px;"/></td>
+                    </tr>  
+
+
+                 </table>
+
+                    
+                    
+            </div>        
+
+        </div>
+
+
+        <!-- Div que contendrá la salida -->
+        <div id="WebGL-salida">
+        </div>
+
+
+    </div>
+
+    <!--Panel GPIO-->
+    <div style="float: left; width: 350px;">
+        <h4>Panel GPIO</h4>
+        <hr/>
+
+        <div style="overflow: hidden;">
+            <div style="float: left; margin-top: 20px; width: 75px">
+
+                <div>
+                    <input id="btn3v3" type="button" value="3v3" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO02" type="button" value="GPIO2" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled"/>
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO3" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO4" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO17" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO27" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO22" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="3v3" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO10" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO9" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO11" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+            </div>
+
+            <div style="float: left; margin: 5px;">
+                <img src="GPIO.png" alt="" style="width: 100px;" />
+            </div>
+
+            <div style="float: left;margin-top: 20px">
+
+                <div>
+                    <input id="btn3v3" type="button" value="5v" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="5v" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO14" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO15" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO18" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO23" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO24" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO25" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO8" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="GPIO7" style="width: 100%; margin-bottom: 11px; font-weight: bold" disabled="disabled" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Menu -->
+    <nav class="menu" id="theMenu">
+        <div class="menu-wrap">
+            <h1 class="logo"><a href="p2.html">EMULADOR</a></h1>
+            <i class="icon-remove menu-close"></i>
+            <a href="index.html" class="smoothScroll">Principal</a>
+            <a href="#about" class="smoothScroll">Sobre el Proyecto</a>
+            <a href="#portfolio" class="smoothScroll">Emulador</a>
+            <a href="#contact" class="smoothScroll">Contacto</a>
+            <a href="https://www.facebook.com/mauro.zurita.33"><i class="icon-facebook"></i></a>
+            <a href="#"><i class="icon-twitter"></i></a>
+            <a href="#"><i class="icon-dribbble"></i></a>
+            <a href="#"><i class="icon-envelope"></i></a>
+        </div>
+        
+        <!-- Menu button -->
+        <div id="menuToggle"><i class="icon-reorder"></i></div>
+    </nav>
+    
+  <!-- Código Javascript manejo de websocket-->
+    <script language="javascript" type="text/javascript">
+
+       // var wsUri = "ws://echo.websocket.org/";
+        var wsUri = "ws://localhost:1600/";
+        var log;
+        var webSocket;
+        
+
+        function init() {
+            log = document.getElementById("mensajes");
+            ConectarWebSocket();
+            RegistrosValue();
+
+        }
+
+        function RegistrosValue() {
+          console.log("int_en: " + int_en.toString(2));
+          console.log("int_map: " + int_map.toString(2));
+          console.log("tap_axes: " + tap_axes);
+          console.log("th_tap: " + th_tap);
+          console.log("dur: " + dur);
+          console.log("latency: " + (latent+1)*0.00125);
+          console.log("window_2: " + (window_2+1)*0.00125);
+         }
+
+        function ConectarWebSocket() {
+            webSocket = new WebSocket(wsUri);
+            webSocket.onopen = onOpen;
+            webSocket.onclose = onClose;
+            webSocket.onmessage = onMessage;
+            webSocket.onerror = onError;
+           // webSocket.binaryType = "arraybuffer";
+           webSocket.binaryType = "arraybuffer";
+
+        }
+
+        function onOpen(evt) {
+            writeToScreen("CONECTADO");
+        }
+
+        function onClose(evt) {
+            webSocket.close();
+            writeToScreen("DESCONECTADO");
+        }
+
+      //-----------------------------VALORES POR DEFECTO - REGISTROS-------------------------------------
+        var m;
+        var rate = 0x0A; //100 hz tasa de muestreo
+        var int_en= 0xC3; //desabilitadas
+        var int_map = 0X00; //MAPEADAS A INT 1
+        var tap_axes= 0x07; //ejes x y z
+        var th_tap = 0.0625; //16g
+        var dur= 0.16 ; //160 ms
+        var latent = 0xFF; //320 ms
+        var window_2 = 0xFF; //320 ms
+        var int_source=0x02; //read only para el user --> muestras las interrup activadas
+        var act_tap_status; //raed omly-> muestra el estado de los eventos activos
+
+        function onMessage(evt) {
+           
+            //-----------Reg Direction----------------------
+            var reg= convertToHex(evt.data[0]);
+            console.log("REG: " + reg);
+
+            switch(reg){//compruebo dirección del registro
+                case '31': 
+                    var rango= convertToHex(evt.data[1]);
+                    console.flog("RANGO: " + rango);
+                    switch(rango){//Por defecto FULL_RES=1, Justify=1. Resul.completa y justif a la izq.
+                        case 'c'://En funcion de lo que llega en los bits D1 y D0 se varía la G.
+                        writeToScreen("2G");
+                        break;
+
+                        case 'd':
+                        writeToScreen("4G");
+                        break;
+
+                        case 'e':
+                        writeToScreen("8G");
+                        break;
+
+                        case 'f':
+                        writeToScreen("16G");
+                        break;
+
+                        default:
+                        writeToScreen('Fuera de rango'+ rango);
+                        break;
+                    }
+                 break;
+                  
+                case '2c':
+                    if(evt.data[1]==null){rate='0'}
+                    else{rate = convertToHex(evt.data[1]);} 
+                   // console.log("RATE: " + rate);
+                   //var rate = evt.data.toString(16);
+                   console.log("evt.data[1]: " + rate);
+                    switch(rate){ //Bits D3-D0 Reg 2C Por defecto D4=0 bit de low power, el resto no interesa, en 0
+                        case '0': writeToScreen("0"); rate = 10000;console.log("rate: " + rate);break; //0.10 hz
+                        case '1': writeToScreen("1");break; //0.10 hz
+                        case '2': writeToScreen("2");break; 
+                        case '3': break;
+                        case '4':break;
+                        case '5':break;
+                        case '6':break;
+                        case '7':break;
+                        case '8':break;
+                        case '9':break;
+                        case 'a':rate = 10; writeToScreen("100 Hz");break; //100 hz
+                        case 'b':break;
+                        case 'c':break;
+                        case 'd':break;
+                        case 'e':break;
+                        case 'f':rate = 0.3125;break;// 3200 hz
+                        default: writeToScreen('Fuera de rango');break;
+                    }
+                break;
+               
+                case '2d'://bit D3 mode adquisicion=1, modo espera=0
+                    if(evt.data[1]==null){var mode='0'}
+                    else{var mode = convertToHex(evt.data[1]);
+                         console.log("MODO: " + mode);
+
+                         } 
+                                
+                    switch(mode){
+                        case '0':writeToScreen('Modo Espera'); clearInterval(m);break;
+                        case '8':writeToScreen('Modo Adquisición');console.log("Modo Rate: " + rate);
+                                 m=setInterval(get_muestra, rate);
+                        break;
+                        default: writeToScreen('Fuera de rango'+ mode);break;   
+                    }
+                    
+                break;    
+
+                case '2e':int_en = convertToHex(evt.data[1]);console.log("int_en: " + int_en); break;
+
+                case '2f':int_map = convertToHex(evt.data[1]);console.log("int_map: " + int_map); break; 
+
+                case '2a':tap_axes = convertToHex(evt.data[1]);console.log("tap_axes: " + tap_axes); break; 
+
+                case '1d':th_tap = convertToHex(evt.data[1])*0.0625;console.log("th_tap: " + th_tap); break;    
+                
+                case '21':dur = convertToHex(evt.data[1]);console.log("dur: " + dur); break;  
+                
+                case '22':latent = convertToHex(evt.data[1]);console.log("latency: " + latent); break;
+
+                case '23':window_2 = convertToHex(evt.data[1]);console.log("window_2: " + window_2); break;
+
+             
+                default:
+                    writeToScreen("Registro incorrecto");
+                break;
+            }
+ //-----------------------------------------------------------
+
+
+           /* if (evt.data[0] == '1') {
+                document.getElementById("rdLed").checked = true;
+                writeToScreen('<span style="color: blue;">RESPUESTA: LED ACTIVADO </span>');
+                }
+            else {
+                document.getElementById("rdLed").checked = false;
+                writeToScreen('<span style="color: blue;">RESPUESTA: LED DESACTIVADO </span>' + evt.data);
+            }*/
+            //webSocket.close();
+        }
+//------------------------------------------------------------
+        function get_muestra() {
+             var str_anglex1= anglex1.toString(16);
+             if(str_anglex1[1]==null){str_anglex1= '0' + str_anglex1[0]}
+             var str_angley1= angley1.toString(16);
+             if(str_angley1[1]==null){str_angley1= '0' + str_angley1[0]}   
+             var str_anglez1= anglez1.toString(16);
+             if(str_anglez1[1]==null){str_anglez1= '0' + str_anglez1[0]}      
+
+              var dir_x0 = '2'; 
+              var res = dir_x0.concat(str_anglex1[1],str_anglex1[0],str_angley1[1],str_angley1[0],str_anglez1[1],str_anglez1[0]);
+              webSocket.send(res); 
+
+            console.log("ENVIADO X: " + Math.round(anglex));
+            console.log("ENVIADO Y: " + Math.round(angley));
+            console.log("ENVIADO Z: " + Math.round(anglez));
+        }
+
+//------------------------------------------------------------
+        function convertToHex(str) {
+                var hex = '';
+                for(var i=0;i<str.length;i++) {
+                    hex += ''+str.charCodeAt(i).toString(16);
+                }
+                return hex;
+        }
+
+        function onError(evt) {
+            writeToScreen('<span style="color: red;">ERROR: </span>' + evt.data);
+        }
+
+        function doSend(message) {
+            webSocket.send(message);
+            writeToScreen("ENVIADO: " + message);
+        }
+
+        function writeToScreen(message) {
+            var pre = document.createElement("p");
+            pre.style.wordWrap = "break-word";
+            pre.innerHTML = message;
+            log.appendChild(pre);
+        }
+        
+        function EncenderLed() {
+            doSend("ACTIVAR");
+        }
+
+        function ApagarLed() {
+            doSend("DESACTIVAR");
+        }
+
+        function Conectar() {
+            ConectarWebSocket();
+        }
+
+        window.addEventListener("load", init, false);
+    </script>
+
+<!-- Código Javascript que ejecuta nuestros ejemplos Three.js -->
+<script type="text/javascript">
+
+    var cube,renderer, scene, camera;
+    // una vez que todo ha sido cargado, ejecutamos nuestro contenido Three.js.
+    $(function () {
+
+        // creamos una scene, que contendrá todos nuestros elementos, como objetos, cámaras y luces.
+        scene = new THREE.Scene();
+
+        // creamos una camera, que define desde donde vamos a mirar.
+        //camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera = new THREE.PerspectiveCamera(35, 1.5, 0.1, 1000);
+        // creamos un render y configuramos el tamaño
+        renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColorHex(0xEEEEEE);
+        //renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(530, 400);
+        renderer.shadowMapEnabled = true;
+        
+        
+        var axes = new THREE.AxisHelper( 20 );
+        scene.add(axes);
+
+        // creamos el plano del suelo
+        var planeGeometry = new THREE.PlaneGeometry(20,20);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+        plane.receiveShadow  = true;
+
+        // rotamos y posicionamos el plano
+        plane.rotation.x=-0.5*Math.PI;
+        plane.position.x=0
+        plane.position.y=0
+        plane.position.z=0
+
+        // añadimos el plano a la escena
+        scene.add(plane);
+
+        // creamos un cubo
+        var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.castShadow = true;
+
+        // posicionamos el cubo
+        cube.position.x=-0;
+        cube.position.y=10;
+        cube.position.z=0;
+        
+        // Rotacion inicial
+        cube.rotation.x = 0;
+        cube.rotation.y = 0;
+        cube.rotation.z = 0;
+        // Posicion inicial
+       /* cube.position.x = 0;
+        cube.position.y = 0;
+        cube.position.z = 0;*/
+        // Muestro los valores obtenidos en las cajas de texto
+        document.getElementById("InputX").value = cube.rotation.x;
+        document.getElementById("InputY").value = cube.rotation.y;
+        document.getElementById("InputZ").value = cube.rotation.z;
+        document.getElementById("InputX_t").value = cube.position.x;
+        document.getElementById("InputY_t").value = cube.position.y;
+        document.getElementById("InputZ_t").value = cube.position.z;
+        // añadimos el cubo a la escena
+        scene.add(cube);
+        
+        // posiciona y apunta la cámara al centro de la escena
+        camera.position.x = -30;
+        camera.position.y = 40;
+        camera.position.z = 30;
+        camera.lookAt(scene.position);
+        
+        // añadimos spotlight para las sombras
+        var spotLight = new THREE.SpotLight( 0xffffff );
+        spotLight.position.set( -40, 80, -10 );
+        spotLight.castShadow = true;
+        spotLight.castShadow = true;
+        scene.add( spotLight );
+
+
+        // añadir la salida de la renderización al elemento html
+        $("#WebGL-salida").append(renderer.domElement);
+
+        // renderizar la escena
+        renderer.render(scene, camera);
+    });
+
+        //Función para rotar el cubo.
+        var anglex = 0; // valor en grados de x
+        var angley = 0; // valor en grados de y
+        var anglez = 0; // valor en grados de z
+        var anglex1 =0;
+        var angley1 =0;
+        var anglez1 =0;
+        //var str_anglex1,str_angley1,str_anglez1=0';
+
+        function mueve(dir) {
+           // var pos = camara.position.x;
+            if (dir == 'derx') {
+                cube.rotation.x += (1 * (Math.PI / 180));
+            }
+            if (dir == 'izqx') {
+                cube.rotation.x -= (1 * (Math.PI / 180));
+            }
+           if (dir == 'dery') {
+                cube.rotation.y += (1 * (Math.PI / 180));
+            }
+            if (dir == 'izqy') {
+                cube.rotation.y -= (1 * (Math.PI / 180));
+            }
+            if (dir == 'derz') {
+                cube.rotation.z += (1 * (Math.PI / 180));
+            }
+            if (dir == 'izqz') {
+                cube.rotation.z -= (1 * (Math.PI / 180));
+            }
+
+            // Pase de radianes a grados los valores de los ejes
+            anglex = (cube.rotation.x * (180 / Math.PI));
+            angley = (cube.rotation.y * (180 / Math.PI));
+            anglez = (cube.rotation.z * (180 / Math.PI));
+            //Paso de angulo a valor de 8 bits
+             anglex1 = Math.round((anglex)*(255/359));//0-360-->0-255
+             angley1 = Math.round((angley)*(255/359));//0-360-->0-255
+             anglez1 = Math.round((anglez)*(255/359));//0-360-->0-255
+            
+         /*    //Convierto a string
+             var str_anglex1= anglex1.toString(16);
+             if(str_anglex1[1]==null){str_anglex1= '0' + str_anglex1[0]}
+             var str_angley1= angley1.toString(16);
+             if(str_angley1[1]==null){str_angley1= '0' + str_angley1[0]}   
+             var str_anglez1= anglez1.toString(16);
+             if(str_anglez1[1]==null){str_anglez1= '0' + str_anglez1[0]}      
+
+              var dir_x0 = '2'; 
+              var res = dir_x0.concat(str_anglex1[1],str_anglex1[0],str_angley1[1],str_angley1[0],str_anglez1[1],str_anglez1[0]);
+              webSocket.send(res); */
+
+           // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputX").value = Math.round(anglex);
+            document.getElementById("InputY").value = Math.round(angley);
+            document.getElementById("InputZ").value = Math.round(anglez);
+            
+            renderer.render(scene, camera);
+        }
+
+    //Función de Reset
+        function reset() {
+                    cube.rotation.x = 0;
+                    cube.rotation.y = 0;
+                    cube.rotation.z = 0;
+                    cube.position.x=-0;
+                    cube.position.y=10;
+                    cube.position.z=0;
+                    renderer.render(scene, camera);
+            // Pase de radianes a grados los valores de los ejes
+            anglex = (cube.rotation.x * (180 / Math.PI));
+            angley = (cube.rotation.y * (180 / Math.PI));
+            anglez = (cube.rotation.z * (180 / Math.PI));
+
+             // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputX").value = Math.round(anglex);
+            document.getElementById("InputY").value = Math.round(angley);
+            document.getElementById("InputZ").value = Math.round(anglez);
+             // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputX_t").value = Math.round(cube.position.x);
+            document.getElementById("InputY_t").value = Math.round(cube.position.y);
+            document.getElementById("InputZ_t").value = Math.round(cube.position.z);
+        }
+
+    //Función para trasladar el cubo.
+    function mueve1(dir) {
+           // var pos = camara.position.x;
+            if (dir == 'derx') {
+                cube.position.x += 1;
+            }
+            if (dir == 'izqx') {
+                cube.position.x -= 1;
+            }
+            if (dir == 'dery') {
+                cube.position.y += 1;
+            }
+            if (dir == 'izqy') {
+                cube.position.y -= 1;
+            }
+            if (dir == 'derz') {
+                cube.position.z += 1;
+            }
+            if (dir == 'izqz') {
+                cube.position.z -= 1;
+            }
+
+            //Enviamos por websockets y por consola los valores de las coordenadas en angulos
+          /*  webSocket.send(Math.round(cube.position.x));
+            webSocket.send(Math.round(cube.position.y));
+            webSocket.send(Math.round(cube.position.z)); */
+            console.log("ENVIADO: " + Math.round(cube.position.x));
+            console.log("ENVIADO: " + Math.round(cube.position.y));
+            console.log("ENVIADO: " + Math.round(cube.position.z));
+
+           // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputX_t").value = Math.round(cube.position.x);
+            document.getElementById("InputY_t").value = Math.round(cube.position.y);
+            document.getElementById("InputZ_t").value = Math.round(cube.position.z);
+            
+            renderer.render(scene, camera);
+    }
+//----------------------------------F. ESPECIALES-TAP Y DOBLE TAP---------------------------
+var fuerza=0;
+    
+    function mueve3(dir) {
+            if (dir == 'g+') {fuerza += 0.0625;}
+            if (dir == 'g-') {fuerza -= 0.0625;}
+           // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputG").value=fuerza;
+
+    }
+//---------------------------------------------------------------
+
+var endTime;
+var startTime;
+var diffTime;
+var flag_tap;
+function mouseDown() {
+    //document.getElementById("InputTap").value = "The mouse button is held down.";
+    document.getElementById("InputTap").value=fuerza;
+        //console.time('TimeTap');
+    // console.log("fuerza: " + fuerza);   
+    // console.log("th_tap: " + th_tap);   
+     if(fuerza >= th_tap){startTime = new Date();}
+}
+
+function mouseUp() {
+   // document.getElementById("InputTap").value = "You released the mouse button.";
+    //console.timeEnd('TimeTap');
+    if(fuerza >= th_tap){endTime = new Date();
+                         diffTime= (endTime-startTime)/1000; 
+                         console.log(diffTime +" seg");
+                         console.log("dur: " + dur +" seg");
+                        if(diffTime < dur){tap_simple();}
+                        else{console.log("Tap largo, no registrado");}  
+                        }
+    else{console.log("Fuerza insuficiente");}
+    document.getElementById("InputTap").value=0;
+}
+
+function tap_simple() {
+    //Convierto a string;
+    var int_en_h= int_en.toString(2);
+    var int_map_h = int_map.toString(2);
+    var int_source_h= int_source.toString(2);//convierto a binario
+    //completo con ceros por izq
+    var int_en_h1=ajustar(7,int_en_h);
+    var int_map_h1=ajustar(7,int_map_h);
+    var int_source_h1=ajustar(7,int_source_h);
+
+    console.log("interrupt enable " + int_en_h1);
+    console.log("interrupt mapped " + int_map_h1);
+    console.log("interrupt source " + int_source_h1);
+  /*  var mierda1 = int_source_h1;//000000010
+    var mierda2 = 0xF0;//11110000
+    var mierda3 = int_source_h1 | mierda2.toString(2);
+    console.log("mierda " + mierda3);*/
+
+    if(int_en_h1[6] == 1 && int_en_h1[5] == 0 && int_map_h1[6]== 0){//Si esta hab tap y !d.tap y map a INT1
+            var valor=0x40;//valor para activar el evento asociado --> el user lee y decidira que hacer
+            int_source_h1 =  valor.toString(2) | int_source_h1; //01000000 + 00000010
+            console.log("interrupt mapped INT 1");
+            console.log("interrupt source " + int_source_h1);
+     
+            var int_source_h1 = parseInt(int_source_h1, 2);
+           // console.log(int_source_h1.toString(16));
+            var int_source_x =  int_source_h1.toString(16);//paso a hex para poder mandarlo por el socket
+            int_source_x = ajustar(1,int_source_x);//completo con 0 por izq de ser necesario
+            console.log("valor hex a env " + int_source_x);
+
+            webSocket.send(String.fromCharCode(46).concat(int_source_x[1],int_source_x[0]));//2E-PL-PH
+            }
+
+    if(int_en_h1[6] == 1 && int_en_h1[5] == 0 && int_map_h1[6]== 1){//Si esta hab tap y !d.tap y map a INT2
+            var valor=0x40;//valor para activar el evento asociado --> el user lee y decidira que hacer
+            int_source_h1 =  valor.toString(2) | int_source_h1; //01000000 + 00000010
+            console.log("interrupt mapped INT 2");
+            console.log("interrupt source " + int_source_h1);
+     
+            var int_source_h1 = parseInt(int_source_h1, 2);
+           // console.log(int_source_h1.toString(16));
+            var int_source_x =  int_source_h1.toString(16);//paso a hex para poder mandarlo por el socket
+            int_source_x = ajustar(1,int_source_x);//completo con 0 por izq de ser necesario
+            console.log("valor hex a env " + int_source_x);
+
+            webSocket.send(String.fromCharCode(46).concat(int_source_x[1],int_source_x[0]));//2E-PL-PH
+            } 
+
+}
+/*
+function ponerCeros(obj) {
+  while (obj.value.length<8)
+    obj.value = '0'+obj.value;
+}
+*/
+
+function hex2a(hexx) {
+    var hex = hexx.toString();//force conversion
+    var str = '';
+    for (var i = 0; i < hex.length; i += 2)
+        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+    return str;
+}
+
+//---------------------------------------------------------------------------------------------------------------
+function ajustar(tam, num) {
+if (num.length <= tam) return ajustar(tam, "0" + num)
+else return num;
+}
+//==========================================================================================================
+//Funcion giro 360 en eje X
+    var tmr;
+    function giro_x_completo() {
+        reset();
+      //  for(var i=0;i<359;i++) {
+            /* cube.rotation.x += (1 * (Math.PI / 180));
+             console.log("ENVIADO: " + Math.round(cube.rotation.x));
+             renderer.render(scene, camera);*/
+           tmr= setInterval(pinta, 20);
+       // }
+    }
+    function pinta(){
+             cube.rotation.x += (1 * (Math.PI / 180));
+             anglex = (cube.rotation.x * (180 / Math.PI));
+           //  console.log("ENVIADO: " + Math.round(anglex));
+             renderer.render(scene, camera);
+           //  webSocket.send(Math.round(anglex));//envio muestra a cada 20 ms
+    }
+
+   function verificar_check(){
+           if(document.getElementById("check").checked == true) {giro_x_completo();}
+           else{clearInterval(tmr);}
+    }
+
+</script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/classie.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/smoothscroll.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">  
+    
+    <title>Emulador Proyecto SDG2 (2015/2016)</title>
+    
+    <style>
+          
+            /* configurar margin a 0 y overflow a hidden, para ocupar pantalla completa */
+            body{
+                margin: 0;
+                /*overflow: hidden;*/
+                padding: 10px;
+            }
+
+    </style>
+        
+    <script type="text/javascript" src="three.js"></script>
+    <script type="text/javascript" src="jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+        
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+        
+</head>
+
+<body data-spy="scroll" data-offset="0" data-target="#theMenu">
+
+<div style="overflow: hidden; width: 100%; min-width: 1036px;">
+
+    <!--Proyecto SDG2 2015/2016-->
+    <div style="float: left; width: 400px; margin-right: 10px;">
+        <h4>Proyecto SDG2 2015/2016</h4>
+        <hr/>
+
+        <div style="overflow: hidden;">
+        Jugador 1                
+            <table style="margin-top: 13px">
+            <tr>
+                <th><input id="btnGPIO22P" type="button" value="LED START" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
+                <th><input id="btnGPIO10P" type="button" value="LED 1" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  /></th>
+                <th><input id="btnGPIO09P" type="button" value="LED 2" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  /></th>
+                <th><input id="btnGPIO11P" type="button" value="LED 3" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
+                <th><input id="btnGPIO05P" type="button" value="LED 4" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
+            </tr>
+            <tr>
+                <th><input id="btnGPIO02P" type="button" value="BTN START" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '02')"/></th>
+                <th><input id="btnGPIO03P" type="button" value="BTN 1" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '03')"/></th>
+                <th><input id="btnGPIO04P" type="button" value="BTN 2" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '04')"/></th>
+                <th><input id="btnGPIO17P" type="button" value="BTN 3" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '11')"/></th>
+                <th><input id="btnGPIO27P" type="button" value="BTN 4" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '1b')"/></th>
+            </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+    <!-- Menu -->
+    <nav class="menu" id="theMenu">
+        <div class="menu-wrap">
+            <h1 class="logo"><a href="p2.html">EMULADOR</a></h1>
+            <h1 class="logo"><a href="proyecto_SDG2.html">PROYECTO SDG2 (2016/2015)</a></h1>
+            <i class="icon-remove menu-close"></i>
+            <a href="index.html" class="smoothScroll">Principal</a>
+            <a href="#about" class="smoothScroll">Sobre el Proyecto</a>
+            <a href="#portfolio" class="smoothScroll">Emulador</a>
+            <a href="#contact" class="smoothScroll">Contacto</a>
+            <a href="#"><i class="icon-facebook"></i></a>
+            <a href="#"><i class="icon-twitter"></i></a>
+            <a href="https://github.com/rsanchez15"><i class="icon-github"></i></a>
+            <a href="#"><i class="icon-envelope"></i></a>
+        </div>
+        
+        <!-- Menu button -->
+        <div id="menuToggle"><i class="icon-reorder"></i></div>
+    </nav>
+    
+
+
+<!-- Código Javascript manejo de websocket--> 
+     <script type="text/javascript" src="socket_gpio_1700_2.js"></script> 
+     <script type="text/javascript" src="gpio.js"></script> 
+       
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/classie.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/smoothscroll.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,399 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">  
+    
+    <title>Emulador</title>
+    
+    <style>
+          
+            /* configurar margin a 0 y overflow a hidden, para ocupar pantalla completa */
+            body{
+                margin: 0;
+                /*overflow: hidden;*/
+                padding: 10px;
+            }
+
+    </style>
+        
+    <script type="text/javascript" src="three.js"></script>
+    <script type="text/javascript" src="jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+        
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+        
+</head>
+
+<body data-spy="scroll" data-offset="0" data-target="#theMenu">
+
+
+    <!--Dispositivos-->
+    <div style="float: left; width: 300px; margin-right: 10px;">
+        <h4>Dispositivos</h4>
+        <hr/>
+
+        <div style="overflow: hidden;">
+
+            <h5>GPIO</h5>
+
+            <div style="float: left; width: 100px">
+                <input id="btnConectarGPIO" type="button" value="Conectar" onclick=" Conectar2() " style="width: 95px"/>
+                <br/>
+                <br/>
+            <input id="btnDesconectarGPIO" type="button" value="Desconectar" onclick=" onClose2() " style="width: 95px"/> 
+                <br/><br/>
+            <!--<input id="toggle_gpio_btn" type="button" value="Toggle GPIO" class="no_tog" onClick="toggle_gpio(this)" style="width: 95px"/>-->
+            </div>
+            <div style="float: right; width: 190px;">
+                <div id="mensajesGPIO" style="border: 1px solid #ccc; height: 150px; overflow: scroll; font-size: 12px;">
+                </div>
+                <div id="mensajesGPIO2" style="border: 1px solid #ccc; height: 150px; overflow: scroll; font-size: 12px;">
+                </div>                
+            </div>
+        </div>
+    </div> 
+
+    <!--Proyecto SDG2 2015/2016-->
+    <div style="float: left; width: 400px; margin-right: 10px;">
+        <h4>Proyecto SDG2 2015/2016</h4>
+        <hr/>
+
+        <div style="overflow: hidden;">
+        Jugador 1                
+            <table style="margin-top: 13px">
+            <tr>
+                <th><input id="btnGPIO22P" type="button" value="LED START" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
+                <th><input id="btnGPIO10P" type="button" value="LED 1" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  /></th>
+                <th><input id="btnGPIO09P" type="button" value="LED 2" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  /></th>
+                <th><input id="btnGPIO11P" type="button" value="LED 3" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
+                <th><input id="btnGPIO05P" type="button" value="LED 4" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
+            </tr>
+            <tr>
+                <th><input id="btnGPIO02P" type="button" value="BTN START" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '02')"/></th>
+                <th><input id="btnGPIO03P" type="button" value="BTN 1" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '03')"/></th>
+                <th><input id="btnGPIO04P" type="button" value="BTN 2" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '04')"/></th>
+                <th><input id="btnGPIO17P" type="button" value="BTN 3" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '11')"/></th>
+                <th><input id="btnGPIO27P" type="button" value="BTN 4" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '1b')"/></th>
+            </tr>
+            </table>
+        </div>
+    </div>
+
+    <!--Panel GPIO-->
+    <div style="float: left; height: 900px; width: 300px; margin-right: 10px;">
+        <h4>Panel GPIO</h4>
+        <hr/>
+
+        <div style="overflow: hidden;">
+            <div style="float: left; margin-top: 20px; width: 75px">
+
+                <div>
+                    <input id="btn3v3" type="button" value="3v3" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO02" type="button" value="GPIO2" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '02')" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO03" type="button" value="GPIO3" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '03')" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO04" type="button" value="GPIO4" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '04')"  />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO17" type="button" value="GPIO17" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '11')" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO27" type="button" value="GPIO27" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '1b')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO22" type="button" value="GPIO22" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '16')" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="3v3" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO10" type="button" value="GPIO10" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '0a')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO09" type="button" value="GPIO9" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '09')" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO11" type="button" value="GPIO11" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '0b')" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="ID_SD" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO05" type="button" value="GPIO5" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '05')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO06" type="button" value="GPIO6" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '06')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO13" type="button" value="GPIO13" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '0d')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO19" type="button" value="GPIO19" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '13')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO26" type="button" value="GPIO26" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '1a')"/>
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+            </div>
+
+            <div style="float: left; margin: 5px;">
+                <img src="GPIO2.png" alt="" style="height: 100%; width: 100px;" />
+            </div>
+
+            <div style="float: left;margin-top: 20px">
+
+                <div>
+                    <input id="btn3v3" type="button" value="5v" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="5v" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO14" type="button" value="GPIO14" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '0e')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO15" type="button" value="GPIO15" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '0f')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO18" type="button" value="GPIO18" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '12')" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO23" type="button" value="GPIO23" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '17')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO24" type="button" value="GPIO24" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '18')"/>
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO25" type="button" value="GPIO25" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_togglestyle(this, '19')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO08" type="button" value="GPIO8" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '08')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO07" type="button" value="GPIO7" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '07')"/>
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="ID_SC" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO12" type="button" value="GPIO12" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '0c')"/>
+                </div>
+
+                <div>
+                    <input id="btn2" type="button" value="Ground" style="width: 100%; margin-bottom: 13px; font-weight: bold" disabled="disabled" />
+                </div>
+
+                <div>
+                    <input id="btnGPIO16" type="button" value="GPIO16" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '10')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO20" type="button" value="GPIO20" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '14')"/>
+                </div>
+
+                <div>
+                    <input id="btnGPIO21" type="button" value="GPIO21" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_togglestyle(this, '15')"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--Teclado Matricial-->
+    <div style="float: left; width: 180px; margin-right: 10px; margin-bottom: 30px">
+        <h4>Teclado Matricial</h4>
+        <hr/>
+
+        <div style="overflow: hidden;">
+            <div style="float: left; margin-top: 20px; width: 75px">
+
+                <table style="height: 200px; width: 200px">
+                    <tr>
+                        <th><input id="btnGPIO14M1" type="button" value="1" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '18', 'btnGPIO14')"/></th>
+                        <th><input id="btnGPIO14M2" type="button" value="2" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '19', 'btnGPIO14')"/></th>
+                        <th><input id="btnGPIO14M3" type="button" value="3" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '08', 'btnGPIO14')"/></th>
+                        <th><input id="btnGPIO14M4" type="button" value="C" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '07', 'btnGPIO14')"/></th>
+                    </tr>
+                    <tr>
+                        <th><input id="btnGPIO15M1" type="button" value="4" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '18', 'btnGPIO15')"/></th>
+                        <th><input id="btnGPIO15M2" type="button" value="5" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '19', 'btnGPIO15')"/></th>
+                        <th><input id="btnGPIO15M3" type="button" value="6" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '08', 'btnGPIO15')"/></th>
+                        <th><input id="btnGPIO15M4" type="button" value="D" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '07', 'btnGPIO15')"/></th>
+                    </tr>
+                    <tr>
+                        <th><input id="btnGPIO18M1" type="button" value="7" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '18', 'btnGPIO18')"/></th>
+                        <th><input id="btnGPIO18M2" type="button" value="8" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '19', 'btnGPIO18')"/></th>
+                        <th><input id="btnGPIO18M3" type="button" value="9" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '08', 'btnGPIO18')"/></th>
+                        <th><input id="btnGPIO18M4" type="button" value="E" class="off" style="width: 100%; font-weight: bold"  onClick="Gpio_matrix(this, '07', 'btnGPIO18')"/></th>
+                    </tr>
+                    <tr>
+                        <th><input id="btnGPIO23M1" type="button" value="A" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_matrix(this, '18', 'btnGPIO23')"/></th>
+                        <th><input id="btnGPIO23M2" type="button" value="0" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_matrix(this, '19', 'btnGPIO23')"/></th>
+                        <th><input id="btnGPIO23M3" type="button" value="B" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_matrix(this, '08', 'btnGPIO23')"/></th>
+                        <th><input id="btnGPIO23M4" type="button" value="F" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  onClick="Gpio_matrix(this, '07', 'btnGPIO23')"/></th>
+                    </tr>
+                </table> 
+            </div>
+        </div>
+    </div>
+
+    <!--ADC CHANNELS-->
+    <div style="float: left; width: 250px; margin-right: 10px; margin-bottom: 30px">
+        <h4>ADC Channels</h4>
+        <hr/>
+
+        <div style="overflow: hidden;">
+                <form>
+                    <table>
+                    <tr>
+                        <th>
+                        <h5>CHANNEL 0</h5>
+                        <input type="text" id="adc_ch0_view" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" disabled="disabled"/></br>
+                        <input type="number" id="adc_ch0_n" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" step="0.01" /></br>
+                        <input id="adc_ch0_btn" type="button" class="adc" value="Send" onClick="enviar_tension(this)" style="width: 95px"/>
+                        <!--<input type="number" id="frec_sin_ch0" style="width: 95px; margin-right: 30px;" onClick="vaciar(this)"/></br>
+                        <input id="sinc_ch0_btn" type="button" class="adc" value="Sin()" onClick="sin_adc(this)" style="width: 95px"/>
+                        <input id="sinc_ch0_stop" type="button" class="adc" value="Stop Sin()" onClick="sin_adc(this)" style="width: 95px"/>-->
+                        </th>
+                        <th>
+                        <h5>CHANNEL 1</h5>
+                        <input type="text" id="adc_ch1_view" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" disabled="disabled"/></br>
+                        <input type="number" id="adc_ch1_n" style="width: 95px" min="-2.5" max="5" step="0.01" /></br>
+                        <input id="adc_ch1_btn" type="button" class="adc" value="Send" onClick="enviar_tension(this)" style="width: 95px"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="margin-right: 30px;">
+                        <h5>CHANNEL 2</h5>
+                        <input type="text" id="adc_ch2_view" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" disabled="disabled"/></br>
+                        <input type="number" id="adc_ch2_n" style="width: 95px; margin-right: 30px;" min="-2.5" max="5" step="0.01" /></br>
+                        <input id="adc_ch2_btn" type="button" class="adc" value="Send" onClick="enviar_tension(this)" style="width: 95px"/>
+                        </th>
+                        <th>
+                        <h5>CHANNEL 3</h5>
+                        <input type="text" id="adc_ch3_view" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" disabled="disabled"/></br>
+                        <input type="number" id="adc_ch3_n" style="width: 95px" min="-2.5" max="5" step="0.01"/></br>
+                        <input id="adc_ch3_btn" type="button" class="adc" value="Send" onClick="enviar_tension(this)" style="width: 95px"/>
+                        </th>
+                    </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Menu -->
+    <nav class="menu" id="theMenu">
+        <div class="menu-wrap">
+            <h1 class="logo"><a href="p2.html">EMULADOR</a></h1>
+            <h1 class="logo"><a href="proyecto_SDG2.html">PROYECTO SDG2 (2016/2015)</a></h1>
+            <i class="icon-remove menu-close"></i>
+            <a href="index.html" class="smoothScroll">Principal</a>
+            <a href="#about" class="smoothScroll">Sobre el Proyecto</a>
+            <a href="#portfolio" class="smoothScroll">Emulador</a>
+            <a href="#contact" class="smoothScroll">Contacto</a>
+            <a href="#"><i class="icon-facebook"></i></a>
+            <a href="#"><i class="icon-twitter"></i></a>
+            <a href="https://github.com/rsanchez15"><i class="icon-github"></i></a>
+            <a href="#"><i class="icon-envelope"></i></a>
+        </div>
+        
+        <!-- Menu button -->
+        <div id="menuToggle"><i class="icon-reorder"></i></div>
+    </nav>
+    
+
+<!-- Código Javascript manejo de websocket-->
+     <script type="text/javascript" src="socket_adc_1600.js"></script>
+     <script type="text/javascript" src="adc.js"></script>
+
+<!-- Código Javascript manejo de websocket-->
+     <script type="text/javascript" src="socket_gpio_1700.js"></script> 
+     <script type="text/javascript" src="gpio.js"></script>  
+       
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/classie.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/smoothscroll.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
+</body>
+
+</html>

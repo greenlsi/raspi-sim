@@ -1,0 +1,6 @@
+[submodule "qemu"]
+	path = qemu
+	url = https://github.com/greenlsi/qemu.git
+[submodule "linux"]
+	path = linux
+	url = https://github.com/raspberrypi/linux.git

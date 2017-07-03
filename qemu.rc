@@ -1,0 +1,9 @@
+export PATH=/opt/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin:$PATH
+export RASPI_REPOS_DIR=/home/rsanchez15/raspi-emu-3
+export INSTALL_MOD_PATH=${RASPI_REPOS_DIR}/modules
+export KERNEL_SRC=${RASPI_REPOS_DIR}/linux
+export CCPREFIX=arm-linux-gnueabihf-
+
+alias rpi-make="ARCH=arm CROSS_COMPILE=$CCPREFIX make"
+alias rpi-config="rpi-make bcmrpi_defconfig"
+alias rpi-driver-make="rpi-make -C ${KERNEL_SRC}"

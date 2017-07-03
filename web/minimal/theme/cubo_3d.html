@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    <title>AnimacionCubo3D.js</title>
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/modernizr.custom.js"></script>
+
+    
+    <script type="text/javascript" src="three.js"></script>
+    <script type="text/javascript" src="jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="stats.js"></script>
+    <script type="text/javascript" src="dat.gui.js"></script>
+    
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+
+
+    <style>
+        body{
+            /* configurar margin a 0 y overflow a hidden, para ocupar pantalla completa */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+
+
+
+</head>
+
+<br>
+<br>
+<br>
+<table>
+    <tr>
+        <td>X</td>
+        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqx'); " /></td>
+        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('derx'); " /></td>
+        <td><input id="InputX" type="text" disabled="disabled" /></td>
+    </tr>
+    <tr>
+        <td>Y</td>
+        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqy'); " /></td>
+        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('dery'); " /></td>
+        <td><input id="InputY" type="text" disabled="disabled" /></td>
+    </tr>
+    <tr>
+        <td>Z</td>
+        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqz'); " /></td>
+        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('derz'); " /></td>
+        <td><input id="InputZ" type="text" disabled="disabled" /></td>
+    </tr>
+</table>    
+
+<body>
+
+
+        <!-- Menu -->
+    <nav class="menu" id="theMenu">
+        <div class="menu-wrap">
+            <h1 class="logo"><a href="cubo_3d.html">EMULADOR</a></h1>
+            <i class="icon-remove menu-close"></i>
+            <a href="index.html" class="smoothScroll">Principal</a>
+            <a href="#about" class="smoothScroll">Sobre el Proyecto</a>
+            <a href="#portfolio" class="smoothScroll">Emulador</a>
+            <a href="#contact" class="smoothScroll">Contacto</a>
+            <a href="https://www.facebook.com/mauro.zurita.33"><i class="icon-facebook"></i></a>
+            <a href="#"><i class="icon-twitter"></i></a>
+            <a href="#"><i class="icon-dribbble"></i></a>
+            <a href="#"><i class="icon-envelope"></i></a>
+        </div>
+        
+        <!-- Menu button -->
+        <div id="menuToggle"><i class="icon-reorder"></i></div>
+    </nav>
+
+<div id="Stats-salida">
+</div>
+<!-- Div que contendrá la salida -->
+<div id="WebGL-salida">
+</div>
+
+
+
+
+
+<!-- Código Javascript que ejecuta nuestros ejemplos Three.js -->
+<script type="text/javascript">
+
+    // una vez que todo ha sido cargado, ejecutamos nuestro contenido Three.js.
+    $(function () {
+		
+        var stats = initStats();
+		
+        // creamos una scene, que contendrá todos nuestros elementos, como objetos, cámaras y luces.
+        var scene = new THREE.Scene();
+
+        // creamos una camera, que define desde donde vamos a mirar.
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // creamos un render y configuramos el tamaño
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColorHex(0xEEEEEE);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+		
+		
+        var axes = new THREE.AxisHelper( 20 );
+        scene.add(axes);
+
+        // creamos el plano del suelo
+        var planeGeometry = new THREE.PlaneGeometry(20,20);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+        plane.receiveShadow  = true;
+
+        // rotamos y posicionamos el plano
+        plane.rotation.x=-0.5*Math.PI;
+        plane.position.x=-3
+        plane.position.y=0
+        plane.position.z=0
+
+        // añadimos el plano a la escena
+        scene.add(plane);
+
+        // creamos un cubo
+        var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.castShadow = true;
+
+        // posicionamos el cubo
+        cube.position.x=-4;
+        cube.position.y=3;
+        cube.position.z=0;
+		
+            // Rotacion inicial
+            cube.rotation.x = 0;
+            cube.rotation.y = 0;
+            cube.rotation.z = 0;
+
+            // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputX").value = cube.rotation.x;
+            document.getElementById("InputY").value = cube.rotation.y;
+            document.getElementById("InputZ").value = cube.rotation.z;
+
+        // añadimos el cubo a la escena
+        scene.add(cube);
+        
+		// creamos una esfera
+      /*  var sphereGeometry = new THREE.SphereGeometry(4,20,20);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
+        var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+   
+
+        // posicionamos la esfera
+        sphere.position.x=20;
+        sphere.position.y=4;
+        sphere.position.z=2;
+         sphere.castShadow=true;
+
+        // añadimos la esfera a la escena
+        scene.add(sphere);
+*/
+        // posiciona y apunta la cámara al centro de la escena
+        camera.position.x = -30;
+        camera.position.y = 40;
+        camera.position.z = 30;
+        camera.lookAt(scene.position);
+		
+		// añadimos spotlight para las sombras
+		var spotLight = new THREE.SpotLight( 0xffffff );
+        spotLight.position.set( -40, 60, -10 );
+		spotLight.castShadow = true;
+		spotLight.castShadow = true;
+        scene.add( spotLight );
+
+
+        // añadir la salida de la renderización al elemento html
+        $("#WebGL-salida").append(renderer.domElement);
+		
+
+ //var step=0;
+
+    /*    var controls = new function() {
+            this.rotation_x = 0;
+            this.rotation_y = 0;
+            this.rotation_z = 0;
+           // this.bouncingSpeed = 0;
+        }*/
+
+     /*   var gui = new dat.GUI();
+        gui.add(controls, 'rotation_x',0,0.5);
+        gui.add(controls, 'rotation_y',0,0.5);
+        gui.add(controls, 'rotation_z',0,0.5);*/
+      /*  gui.add(controls, 'Eje X',0,0.5);
+        gui.add(controls, 'Eje Y',0,0.5);
+        gui.add(controls, 'Eje Z',0,0.5);*/
+       // gui.add(controls, 'bouncingSpeed',0,0.5);
+
+     /*   var gui = new dat.GUI();
+        gui.add(controls, 'rotation_x',0,0.5);
+        gui.add(controls, 'rotation_y',0,0.5);
+        gui.add(controls, 'rotation_z',0,0.5);
+    */
+
+        //Función para rotar el cubo.
+        var anglex = 0; // valor en grados de x
+        var angley = 0; // valor en grados de y
+        var anglez = 0; // valor en grados de z
+        function mueve(dir) {
+            var pos = camara.position.x;
+            if (dir == 'derx') {
+                cube.rotation.x += (5 * (Math.PI / 180));
+            }
+            if (dir == 'izqx') {
+                cube.rotation.x -= (5 * (Math.PI / 180));
+            }
+            if (dir == 'dery') {
+                cube.rotation.y += (5 * (Math.PI / 180));
+            }
+            if (dir == 'izqy') {
+                cube.rotation.y -= (5 * (Math.PI / 180));
+            }
+            if (dir == 'derz') {
+                cube.rotation.z += (5 * (Math.PI / 180));
+            }
+            if (dir == 'izqz') {
+                cube.rotation.z -= (5 * (Math.PI / 180));
+            }
+
+            // Pase de radianes a grados los valores de los ejes
+            anglex = (cube.rotation.x * (180 / Math.PI));
+            angley = (cube.rotation.y * (180 / Math.PI));
+            anglez = (cube.rotation.z * (180 / Math.PI));
+           
+            // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputX").value = Math.round(anglex);
+            document.getElementById("InputY").value = Math.round(angley);
+            document.getElementById("InputZ").value = Math.round(anglez);
+
+           // render();
+        }
+
+
+
+        render();
+
+        function render() {
+            stats.update();
+            // rotate the cube around its axes
+       /*     cube.rotation.x += controls.rotation_x;
+            cube.rotation.y += controls.rotation_y;
+            cube.rotation.z += controls.rotation_z;
+            //cube.rotation.y += controls.rotationSpeed;
+            //cube.rotation.z += controls.rotationSpeed;
+*/
+            // bounce the sphere up and down
+        //    step+=controls.bouncingSpeed;
+        //    cube.position.x = 20+( 10*(Math.cos(step)));
+           // cube.position.y = 2 +( 10*Math.abs(Math.sin(step)));
+
+            // render using requestAnimationFrame
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+			
+
+   
+
+		function initStats() {
+
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            $("#Stats-salida").append( stats.domElement );
+
+            return stats;
+        }	
+			
+			
+			
+			
+    });
+
+
+
+</script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/classie.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/smoothscroll.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

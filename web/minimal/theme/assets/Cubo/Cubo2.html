@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Cubo 3D</title>
+
+    <script type="text/javascript" src="min/Three.js"></script>
+    <script type="text/javascript" src="geometry/primitives/Plane.js"></script>
+    <script type="text/javascript" src="geometry/primitives/Cube.js"></script>
+
+    <script type="text/javascript">
+        //Creación de variables
+        var camara, escena, renderer, plano, cubo;
+        init();
+        function init() {
+            //Configuración  de la escena y la camara
+            escena = new THREE.Scene();
+            //        camara = new THREE.Camera( 75, 1, 1, 10000 );
+            camara = new THREE.Camera(75, 1, 1, 10000);
+            camara.position.y = 500;
+            camara.position.z = 1000;
+            // Creación del plano y sus materiales.
+            materiales = new Array(new THREE.MeshColorFillMaterial(0x999999, 1, 1), new THREE.MeshColorStrokeMaterial(0xcc0000, .5, 1));
+            plano = new THREE.Mesh(new Plane(1000, 1000, 5, 5), materiales);
+
+            //Creación del cubo y asignación de colore a las caras.
+            geometry = new Cube(200, 200, 200);
+            geometry.faces[0].color.setRGBA(255, 0, 0, 1); //Atras
+            geometry.faces[1].color.setRGBA(0, 255, 0, 1); //Frente
+            geometry.faces[2].color.setRGBA(0, 0, 255, 1); //Derecha
+            geometry.faces[3].color.setRGBA(0, 0, 0, 1); //Abajo
+            geometry.faces[4].color.setRGBA(0, 255, 255, 1); //Izquierda
+            geometry.faces[5].color.setRGBA(255, 255, 0, 1); //Arriba
+            cubo = new THREE.Mesh(geometry, new THREE.MeshFaceColorFillMaterial());
+
+            //Aplicar posición del cubo y rotación al plano
+            cubo.position.y = 150;
+            plano.rotation.x = -90 * (Math.PI / 180);
+
+            // Rotacion inicial
+            cubo.rotation.x = 0;
+            cubo.rotation.y = 0;
+            cubo.rotation.z = 0;
+
+            // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputX").value = cubo.rotation.x;
+            document.getElementById("InputY").value = cubo.rotation.x;
+            document.getElementById("InputZ").value = cubo.rotation.x;
+
+            //Agregar los objetos 3d a la escena.
+            escena.addObject(plano);
+            escena.addObject(cubo);
+
+            //Creación del render.
+            renderer = new THREE.CanvasRenderer();
+            renderer.setSize(500, 500);
+
+            //Se agrega el elemento al documento
+            document.body.appendChild(renderer.domElement);
+
+            //Se renderiza.
+            renderer.render(escena, camara);
+        }
+        //Función para rotar el cubo.
+        var anglex = 0; // valor en grados de x
+        var angley = 0; // valor en grados de y
+        var anglez = 0; // valor en grados de z
+        function mueve(dir) {
+            var pos = camara.position.x;
+            if (dir == 'derx') {
+                cubo.rotation.x += (10 * (Math.PI / 180));
+            }
+            if (dir == 'izqx') {
+                cubo.rotation.x -= (10 * (Math.PI / 180));
+            }
+            if (dir == 'dery') {
+                cubo.rotation.y += (10 * (Math.PI / 180));
+            }
+            if (dir == 'izqy') {
+                cubo.rotation.y -= (10 * (Math.PI / 180));
+            }
+            if (dir == 'derz') {
+                cubo.rotation.z += (10 * (Math.PI / 180));
+            }
+            if (dir == 'izqz') {
+                cubo.rotation.z -= (10 * (Math.PI / 180));
+            }
+
+            // Pase de radianes a grados los valores de los ejes
+            anglex = (cubo.rotation.x * (180 / Math.PI));
+            angley = (cubo.rotation.y * (180 / Math.PI));
+            anglez = (cubo.rotation.z * (180 / Math.PI));
+           
+            // Muestro los valores obtenidos en las cajas de texto
+            document.getElementById("InputX").value = Math.round(anglex);
+            document.getElementById("InputY").value = Math.round(angley);
+            document.getElementById("InputZ").value = Math.round(anglez);
+
+            renderea();
+        }
+        function renderea() {
+            renderer.render(escena, camara);
+        }
+
+        
+    </script>
+
+</head>
+<body onload="init()">
+
+<table>
+    <tr>
+        <td>X</td>
+        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqx'); " /></td>
+        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('derx'); " /></td>
+        <td><input id="InputX" type="text" disabled="disabled" /></td>
+    </tr>
+    <tr>
+        <td>Y</td>
+        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqy'); " /></td>
+        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('dery'); " /></td>
+        <td><input id="InputY" type="text" disabled="disabled" /></td>
+    </tr>
+    <tr>
+        <td>Z</td>
+        <td><input type="button" name="iz" id="iz" value=" < " onclick=" mueve('izqz'); " /></td>
+        <td><input type="button" name="de" id="de" value=" > " onclick=" mueve('derz'); " /></td>
+        <td><input id="InputZ" type="text" disabled="disabled" /></td>
+    </tr>
+</table>
+
+</body>
+
+
+
+
+</html>
