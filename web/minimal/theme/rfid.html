@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">  
     
-    <title>Emulador Proyecto SDG2 (2015/2016)</title>
+    <title>Emulador de tarjetas RFID</title>
     
     <style>
           
@@ -40,29 +40,30 @@
 
 <div style="overflow: hidden; width: 100%; min-width: 1036px;">
 
-    <!--Proyecto SDG2 2015/2016-->
-    <div style="float: left; width: 400px; margin-right: 10px;">
-        <h4>Proyecto SDG2 2015/2016</h4>
+    <!--RFID MFRC522-->
+    <div style="float: left; width: 230px; margin-right: 10px;">
+        <h4>Emulador de tarjetas RFID</h4>
         <hr/>
 
         <div style="overflow: hidden;">
-        Jugador 1                
-            <table style="margin-top: 13px">
-            <tr>
-                <th><input id="btnGPIO22P" type="button" value="LED START" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
-                <th><input id="btnGPIO10P" type="button" value="LED 1" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  /></th>
-                <th><input id="btnGPIO09P" type="button" value="LED 2" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold"  /></th>
-                <th><input id="btnGPIO11P" type="button" value="LED 3" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
-                <th><input id="btnGPIO05P" type="button" value="LED 4" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" /></th>
-            </tr>
-            <tr>
-                <th><input id="btnGPIO02P" type="button" value="BTN START" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '02')"/></th>
-                <th><input id="btnGPIO03P" type="button" value="BTN 1" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '03')"/></th>
-                <th><input id="btnGPIO04P" type="button" value="BTN 2" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '04')"/></th>
-                <th><input id="btnGPIO17P" type="button" value="BTN 3" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '11')"/></th>
-                <th><input id="btnGPIO27P" type="button" value="BTN 4" class="off" style="width: 100%; margin-bottom: 13px; font-weight: bold" onClick="Gpio_no_toggle(this, '1b')"/></th>
-            </tr>
-            </table>
+            <h5>ESTADO ACTUAL</h5>
+            <p id="current_state"></p>
+            <h5>Tarjeta 1</h5>
+            User ID: 23AB856D </br>
+            <input id="card_1_col" type="button" class="23AB856D" value="Colocar" onClick="colocar(this)" style="width: 95px"/>
+            <input id="card_1_ret" type="button" class="23AB856D" value="Retirar" onClick="retirar(this)" style="width: 95px"/>
+            <h5>Tarjeta 2</h5>
+            User ID: F56DBB79 </br>
+            <input id="card_2_col" type="button" class="F56DBB79" value="Colocar" onClick="colocar(this)" style="width: 95px"/>
+            <input id="card_2_ret" type="button" class="F56DBB79" value="Retirar" onClick="retirar(this)" style="width: 95px"/>
+            <h5>Tarjeta 3</h5>
+            User ID: 439FBA5D </br>
+            <input id="card_3_col" type="button" class="439FBA5D" value="Colocar" onClick="colocar(this)" style="width: 95px"/>
+            <input id="card_3_ret" type="button" class="439FBA5D" value="Retirar" onClick="retirar(this)" style="width: 95px"/>
+            <h5>Tarjeta 4</h5>
+            User ID: BC39E4D5 </br>
+            <input id="card_4_col" type="button" class="BC39E4D5" value="Colocar" onClick="colocar(this)" style="width: 95px"/>
+            <input id="card_4_ret" type="button" class="BC39E4D5" value="Retirar" onClick="retirar(this)" style="width: 95px"/>
         </div>
     </div>
 </div>
@@ -91,8 +92,8 @@
 
 
 <!-- Código Javascript manejo de websocket--> 
-     <script type="text/javascript" src="socket_gpio_1700_2.js"></script> 
-     <script type="text/javascript" src="gpio.js"></script> 
+     <script type="text/javascript" src="socket_rfid_1800.js"></script> 
+     <script type="text/javascript" src="rfid.js"></script> 
        
 
     <!-- Bootstrap core JavaScript

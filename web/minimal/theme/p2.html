@@ -40,7 +40,7 @@
 
 
     <!--Dispositivos-->
-    <div style="float: left; width: 300px; margin-right: 10px;">
+    <div style="float: left; width: 200px; margin-right: 10px;">
         <h4>Dispositivos</h4>
         <hr/>
 
@@ -49,14 +49,15 @@
             <h5>GPIO</h5>
 
             <div style="float: left; width: 100px">
-                <input id="btnConectarGPIO" type="button" value="Conectar" onclick=" Conectar2() " style="width: 95px"/>
+                <!--<input id="btnConectarGPIO" type="button" value="Conectar" onclick=" Conectar2() " style="width: 95px"/>
                 <br/>
                 <br/>
             <input id="btnDesconectarGPIO" type="button" value="Desconectar" onclick=" onClose2() " style="width: 95px"/> 
-                <br/><br/>
-            <!--<input id="toggle_gpio_btn" type="button" value="Toggle GPIO" class="no_tog" onClick="toggle_gpio(this)" style="width: 95px"/>-->
+                <br/><br/>-->
+            <input id="toggle_gpio_btn" type="button" value="Toggle GPIO" class="tog" onClick="toggle_gpio(this)" style="width: 95px"/>
             </div>
-            <div style="float: right; width: 190px;">
+            <br/><br/>
+            <div style="float: left; width: 190px;">
                 <div id="mensajesGPIO" style="border: 1px solid #ccc; height: 150px; overflow: scroll; font-size: 12px;">
                 </div>
                 <div id="mensajesGPIO2" style="border: 1px solid #ccc; height: 150px; overflow: scroll; font-size: 12px;">
@@ -320,7 +321,7 @@
                     <tr>
                         <th>
                         <h5>CHANNEL 0</h5>
-                        <input type="text" id="adc_ch0_view" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" disabled="disabled"/></br>
+                        <input type="text" id="adc_ch0_view" style="width: 95px; margin-right: 30px;" disabled="disabled"/></br>
                         <input type="number" id="adc_ch0_n" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" step="0.01" /></br>
                         <input id="adc_ch0_btn" type="button" class="adc" value="Send" onClick="enviar_tension(this)" style="width: 95px"/>
                         <!--<input type="number" id="frec_sin_ch0" style="width: 95px; margin-right: 30px;" onClick="vaciar(this)"/></br>
@@ -329,7 +330,7 @@
                         </th>
                         <th>
                         <h5>CHANNEL 1</h5>
-                        <input type="text" id="adc_ch1_view" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" disabled="disabled"/></br>
+                        <input type="text" id="adc_ch1_view" style="width: 95px; margin-right: 30px;" disabled="disabled"/></br>
                         <input type="number" id="adc_ch1_n" style="width: 95px" min="-2.5" max="5" step="0.01" /></br>
                         <input id="adc_ch1_btn" type="button" class="adc" value="Send" onClick="enviar_tension(this)" style="width: 95px"/>
                         </th>
@@ -337,13 +338,13 @@
                     <tr>
                         <th style="margin-right: 30px;">
                         <h5>CHANNEL 2</h5>
-                        <input type="text" id="adc_ch2_view" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" disabled="disabled"/></br>
+                        <input type="text" id="adc_ch2_view" style="width: 95px; margin-right: 30px;" disabled="disabled"/></br>
                         <input type="number" id="adc_ch2_n" style="width: 95px; margin-right: 30px;" min="-2.5" max="5" step="0.01" /></br>
                         <input id="adc_ch2_btn" type="button" class="adc" value="Send" onClick="enviar_tension(this)" style="width: 95px"/>
                         </th>
                         <th>
                         <h5>CHANNEL 3</h5>
-                        <input type="text" id="adc_ch3_view" style="width: 95px; margin-right: 30px;" min="-2.5" max="5.0" disabled="disabled"/></br>
+                        <input type="text" id="adc_ch3_view" style="width: 95px; margin-right: 30px;" disabled="disabled"/></br>
                         <input type="number" id="adc_ch3_n" style="width: 95px" min="-2.5" max="5" step="0.01"/></br>
                         <input id="adc_ch3_btn" type="button" class="adc" value="Send" onClick="enviar_tension(this)" style="width: 95px"/>
                         </th>
@@ -360,6 +361,7 @@
         <div class="menu-wrap">
             <h1 class="logo"><a href="p2.html">EMULADOR</a></h1>
             <h1 class="logo"><a href="proyecto_SDG2.html">PROYECTO SDG2 (2016/2015)</a></h1>
+            <h1 class="logo"><a href="rfid.html">RFID MFRC522</a></h1>
             <i class="icon-remove menu-close"></i>
             <a href="index.html" class="smoothScroll">Principal</a>
             <a href="#about" class="smoothScroll">Sobre el Proyecto</a>

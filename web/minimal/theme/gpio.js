@@ -15,7 +15,7 @@ function Gpio_togglestyle(el, dir_gpio){
 
 	var toggle = true;
 
-	if (toggle){
+	if (document.getElementById("toggle_gpio_btn").className == "tog"){
 		if(el.className == "on") {
         	el.className="off";
         	var res = dir_gpio.concat('0'); 
@@ -70,6 +70,8 @@ function Gpio_matrix(el, dir_gpio, row){
 		(document.getElementById("btnGPIO23").id == row &&  document.getElementById("btnGPIO23").className == "on")){
 		
 		Gpio_togglestyle(el,dir_gpio);
+		//Gpio_no_toggle(el,dir_gpio);
+
 	} else {
 	}
 }
@@ -81,5 +83,4 @@ function toggle_gpio(el){
 	} else {
 		el.className = "tog";
 	}
-	window.location.reload(false);
 }
